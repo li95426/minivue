@@ -23,11 +23,40 @@ class Compiler{
     }
     // 编译元素节点，处理指令
     compileElement(node) {
-
+        // let attrs = node.attributes
+        // console.log(attrs)
+        // 遍历所有属性节点
+        Array.from(node.attributes).forEach(attr => {
+            // 判断是否是指令
+            let attrName = attr.name
+            if(this.isDirective(attrName)) {
+                attrName = attrName.substring(2)
+                let key = attr.value
+                this.update(node, key, attrName)
+            }
+        })
+    }
+    update(node, key, attrName) {
+        let updateFn = this[attrName + 'Updater']
+        updateFn && updateFn(node, key)
+    }
+    // 处理v-text
+    textUpdater(node, value) {
+        node.textContent = value
+    }
+    // 处理v-model
+    modelUpdater(node, value) {
+        node.value = value
     }
     // 编译文本节点，处理插值表达式
     compileText(node) {
-        console.log(node)
+        // console.dir(node)
+        let reg = /\{\{(.+?)\}\}/
+        let value = node.textContent
+        if(reg.test(value)) {
+            let key = RegExp.$1.trim()
+            node.textContent = value.replace(reg, this.vm[key])
+        }
     }
     // 判断元素属性是否是指令
     isDirective(attrName) {

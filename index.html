@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Mini Vue</title>
+</head>
+<body>
+<div id="app">
+  <div>插值表达式</div>
+  <div>{{ msg }}</div>
+  <div>{{ count }}</div>
+  <div>v-text指令</div>
+  <div v-text="msg"></div>
+  <div>v-model</div>
+  <input type="text" v-model="msg">
+</div>
+<script src="./js/compiler.js"></script>
+<script src="./js/observer.js"></script>
+<script src="./js/vue.js"></script>
+<script>
+    let vm = new Vue({
+        el: "#app",
+        data: {
+            msg: "hello",
+            count: 0,
+            person: {
+                name: '张三'
+            }
+        }
+    })
+    console.log(vm.msg)
+    vm.msg = {
+        test: 'test'
+    }
+</script>
+</body>
+</html>

@@ -38,7 +38,7 @@ class Compiler{
     }
     update(node, key, attrName) {
         let updateFn = this[attrName + 'Updater']
-        updateFn && updateFn(node, key)
+        updateFn && updateFn(node, this.vm[key])
     }
     // 处理v-text
     textUpdater(node, value) {

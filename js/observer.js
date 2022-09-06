@@ -15,6 +15,8 @@ class Observer{
     // 调用Object.defineProperty把属性转换成getter和setter
     defineReactive(obj, key, val) {
         let that = this
+        // 负责收集依赖并发送通知
+        let dep = new Dep()
         // 把data中的对象类型的子属性也转换成getter和setter
         this.walk(val)
         Object.defineProperty(obj, key, {
@@ -23,6 +25,8 @@ class Observer{
             get() {
                 // 不能直接返回 obj[key],必须返回在外部传入的val，否则obj[val]会反复调用自己的get方法造成死递归
                 // return obj[key]
+                // 收集依赖，依赖表示watcher对象
+                Dep.target && dep.addSub(Dep.target)
                 return val
             },
             set(newValue) {
@@ -33,6 +37,7 @@ class Observer{
                 // 如果给已存在的响应式数据赋值一个新对象类型的值，调用walk方法将其再次转换为响应式数据
                 that.walk(newValue)
                 // 发送通知
+                dep.notify()
             }
         })
     }
